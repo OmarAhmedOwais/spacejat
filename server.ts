@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 
 import fastify, { FastifyInstance } from 'fastify';
 import swagger from 'fastify-swagger';
-import cors from 'cors';
 import { Server, IncomingMessage, ServerResponse } from 'http';
 import WebSocket from 'ws';
 
@@ -34,7 +33,7 @@ app.register(swagger, {
 });
 
 app.register(userRoutes, { prefix: '/api' });
-app.register(globalErrorMiddleware);
+globalErrorMiddleware(app);
 
 let wss: WebSocket.Server; // define wss outside the function
 
