@@ -12,7 +12,7 @@ import { initSocket } from 'config/ws_connection';
 import userRoutes from './src/routes/user.router';
 import { globalErrorMiddleware } from '@/middlewares';
 // import the db_connection function
-dotenv.config();
+dotenv.config({ path: "config/config.env" });
 
 const app: FastifyInstance<Server, IncomingMessage, ServerResponse> = fastify();
 app.register(swagger, {
