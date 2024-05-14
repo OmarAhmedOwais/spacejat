@@ -1,11 +1,8 @@
 import fastify, { FastifyInstance } from 'fastify';
 import swagger from 'fastify-swagger';
 import { Server, IncomingMessage, ServerResponse } from 'http';
-import mongoose from 'mongoose';
-import { createServer } from 'http';
-import { createUserHandler, getUserHandler, updateUserHandler, deleteUserHandler } from './controllers/userController';
-import userRoutes from './routes/userRoutes';
-import { Server as WebSocketServer } from 'ws';
+import userRoutes from './src/routes/userRoutes';
+import { initSocket } from 'config/io_connection';
 
 const app: FastifyInstance<Server, IncomingMessage, ServerResponse> = fastify();
 
@@ -31,16 +28,9 @@ app.register(userRoutes, { prefix: '/api' });
 
 const start = async (): Promise<void> => {
     try {
-        await mongoose.connect('mongodb://localhost:27017/fastify-demo', {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            useCreateIndex: true
-        });
         console.log('Connected to MongoDB');
 
-        const server = createServer(app.server);
-
-        const wss = new WebSocketServer({ server });
+        const wss = initSocket(app.server);
 
         wss.on('connection', (ws) => {
             console.log('WebSocket client connected');
@@ -52,8 +42,7 @@ const start = async (): Promise<void> => {
             });
         });
 
-        server.listen(3000);
-        app.swagger();
+        await app.listen(3000);
         console.log(`Server listening on http://localhost:3000`);
     } catch (error) {
         console.error('Error starting server:', error);
