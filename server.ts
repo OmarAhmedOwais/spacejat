@@ -3,6 +3,7 @@ import swagger from 'fastify-swagger';
 import { Server, IncomingMessage, ServerResponse } from 'http';
 import userRoutes from './src/routes/userRoutes';
 import { initSocket } from 'config/io_connection';
+import db_connection from 'config/db_connection'; // import the db_connection function
 
 const app: FastifyInstance<Server, IncomingMessage, ServerResponse> = fastify();
 
@@ -26,11 +27,13 @@ app.register(swagger, {
 
 app.register(userRoutes, { prefix: '/api' });
 
+let wss; // define wss outside the function
+
 const start = async (): Promise<void> => {
     try {
-        console.log('Connected to MongoDB');
+        db_connection(); // connect to MongoDB
 
-        const wss = initSocket(app.server);
+        wss = initSocket(app.server);
 
         wss.on('connection', (ws) => {
             console.log('WebSocket client connected');
@@ -50,3 +53,5 @@ const start = async (): Promise<void> => {
 };
 
 start();
+
+export { wss }; // export wss
