@@ -1,4 +1,4 @@
-import userService from '../services/userService';
+import {userService} from '@/services/user.service';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { asyncUtil } from '@/util/async';
 import { IUser, IParams } from '@/types/interfaces';
@@ -10,6 +10,11 @@ const createUser = asyncUtil(
   },
 );
 
+const getUsers = asyncUtil(async (req: FastifyRequest, reply: FastifyReply) => {
+  const user = await userService.getUsers();
+  if (!user.length) return reply.status(404).send({ error: 'No User found' });
+  return reply.send(user);
+});
 const getUser = asyncUtil(async (req: FastifyRequest, reply: FastifyReply) => {
   const { id } = req.params as IParams;
   const user = await userService.getUser(id);

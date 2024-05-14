@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { IUser } from "../types/interfaces/user.interface";
-import { Models } from "@/types/enums/model";
+import { Models } from "@/types/enums/model.enum";
 
 
 const userSchema = new mongoose.Schema<IUser>({

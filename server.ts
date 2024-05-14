@@ -1,9 +1,14 @@
 import fastify, { FastifyInstance } from 'fastify';
 import swagger from 'fastify-swagger';
 import { Server, IncomingMessage, ServerResponse } from 'http';
-import userRoutes from './src/routes/userRoutes';
+import WebSocket from 'ws';
+
 import { initSocket } from 'config/io_connection';
+import userRoutes from './src/routes/user.router';
 import db_connection from 'config/db_connection'; // import the db_connection function
+import 'colors'
+import dotenv from 'dotenv'
+dotenv.config()
 
 const app: FastifyInstance<Server, IncomingMessage, ServerResponse> = fastify();
 app.register(swagger, {
@@ -26,7 +31,7 @@ app.register(swagger, {
 
 app.register(userRoutes, { prefix: '/api' });
 
-let wss; // define wss outside the function
+let wss :WebSocket.Server ; // define wss outside the function
 
 export const start = async (): Promise<void> => {
     try {
@@ -35,19 +40,19 @@ export const start = async (): Promise<void> => {
         wss = initSocket(app.server);
 
         wss.on('connection', (ws) => {
-            console.log('WebSocket client connected');
+            console.log('WebSocket client connected'.green);
             
             ws.on('message', (message) => {
-                console.log('Received message:', message);
+                console.log('Received message:'.blue, message);
                 // Handle message and send response back to client
-                ws.send('Message received by server');
+                ws.send('Message received by server'.blue);
             });
         });
 
         await app.listen(3000);
-        console.log(`Server listening on http://localhost:3000`);
+        console.log(`Server listening on http://localhost:3000`.green);
     } catch (error) {
-        console.error('Error starting server:', error);
+        console.error('Error starting server:'.red, error);
     }
 };
 

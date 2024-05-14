@@ -1,11 +1,16 @@
 import { IUser } from '@/types/interfaces';
-import { User} from '../models/userModel';
+import { User} from '../models/user.model';
 
 
 const createUser = async (userData: IUser) => {
   const user = new User(userData);
   return await user.save();
 };
+
+const getUsers = async () => {
+  return await User.find();
+};
+
 
 const getUser = async (userId: string) => {
   return await User.findById(userId);
@@ -19,4 +24,4 @@ const deleteUser = async (userId: string) => {
   return await User.findByIdAndDelete(userId);
 };
 
-export default { createUser, getUser, updateUser, deleteUser };
+export const userService= { createUser, getUsers, getUser, updateUser, deleteUser };

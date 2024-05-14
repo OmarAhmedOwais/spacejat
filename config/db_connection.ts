@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-
-const MONGO_URI = process.env.MONGO_URI;
+import 'colors'
+const MONGO_URI = process.env.MONGO_URI!;
 
 export default function db_connection(): void {
   mongoose
