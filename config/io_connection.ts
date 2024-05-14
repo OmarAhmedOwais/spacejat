@@ -1,36 +1,31 @@
 import http from 'http';
+import WebSocket from 'ws';
 
-import { Server, Socket } from 'socket.io';
+export const initSocket = (server: http.Server): WebSocket.Server => {
+  const wss = new WebSocket.Server({ server });
 
+  wss.on('connection', (ws: WebSocket) => {
+    console.log('A client connected');
 
-export const initSocket = (server: http.Server): Server => {
-  const io = new Server(server, {
-    pingTimeout: 60000,
-    cors: {
-      origin: '*',
-      methods: ['GET', 'POST'],
-      credentials: true,
-    },
-    transports: ['websocket'],
-  });
+    ws.on('message', (message: string) => {
+      const { type, room } = JSON.parse(message);
 
-  io.on('connection', (socket: Socket) => {
-    console.log(`A Client connected with ID: ${socket.id}`);
-    socket.on('joinRoom', (room: string) => {
-      socket.join(room);
-      console.log(`A Client with ID ${socket.id} joined room: ${room}`);
+      switch (type) {
+        case 'joinRoom':
+          console.log(`A client joined room: ${room}`);
+          break;
+        case 'leaveRoom':
+          console.log(`A client left room: ${room}`);
+          break;
+        default:
+          break;
+      }
     });
 
-    socket.on('leaveRoom', (room: string) => {
-      socket.leave(room);
-      console.log(`Client ${socket.id} left room: ${room}`);
-    });
-
-    socket.on('disconnect', () => {
-      socket.removeAllListeners();
-      console.log(`A Client with ID ${socket.id} disconnected`);
+    ws.on('close', () => {
+      console.log('A client disconnected');
     });
   });
 
-  return io;
+  return wss;
 };
