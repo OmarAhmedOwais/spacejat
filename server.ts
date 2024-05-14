@@ -6,7 +6,6 @@ import { initSocket } from 'config/io_connection';
 import db_connection from 'config/db_connection'; // import the db_connection function
 
 const app: FastifyInstance<Server, IncomingMessage, ServerResponse> = fastify();
-
 app.register(swagger, {
     routePrefix: '/documentation',
     swagger: {
@@ -29,7 +28,7 @@ app.register(userRoutes, { prefix: '/api' });
 
 let wss; // define wss outside the function
 
-const start = async (): Promise<void> => {
+export const start = async (): Promise<void> => {
     try {
         db_connection(); // connect to MongoDB
 

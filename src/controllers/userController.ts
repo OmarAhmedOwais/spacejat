@@ -1,46 +1,44 @@
-const userService = require('../services/userService');
+import userService from '../services/userService';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { asyncUtil } from '@/util/async';
+import { IUser, IParams } from '@/types/interfaces';
 
-const createUser = async (req, reply) => {
-    try {
-        const user = await userService.createUser(req.body);
-        return reply.send(user);
-    } catch (error) {
-        return reply.status(500).send({ error: 'Internal Server Error' });
-    }
-};
+const createUser = asyncUtil(
+  async (req: FastifyRequest, reply: FastifyReply) => {
+    const user = await userService.createUser(req.body as IUser);
+    return reply.send(user);
+  },
+);
 
-const getUser = async (req, reply) => {
-    try {
-        const userId = req.params.id;
-        const user = await userService.getUser(userId);
-        if (!user) return reply.status(404).send({ error: 'User not found' });
-        return reply.send(user);
-    } catch (error) {
-        return reply.status(500).send({ error: 'Internal Server Error' });
-    }
-};
+const getUser = asyncUtil(async (req: FastifyRequest, reply: FastifyReply) => {
+  const { id } = req.params as IParams;
+  const user = await userService.getUser(id);
+  if (!user) return reply.status(404).send({ error: 'User not found' });
+  return reply.send(user);
+});
 
-const updateUser = async (req, reply) => {
-    try {
-        const userId = req.params.id;
-        const userData = req.body;
-        const updatedUser = await userService.updateUser(userId, userData);
-        if (!updatedUser) return reply.status(404).send({ error: 'User not found' });
-        return reply.send(updatedUser);
-    } catch (error) {
-        return reply.status(500).send({ error: 'Internal Server Error' });
-    }
-};
+const updateUser = asyncUtil(
+  async (req: FastifyRequest, reply: FastifyReply) => {
+    const { id } = req.params as IParams;
+    const userData = req.body;
+    const updatedUser = await userService.updateUser(
+      id as string,
+      userData as IUser,
+    );
+    if (!updatedUser)
+      return reply.status(404).send({ error: 'User not found' });
+    return reply.send(updatedUser);
+  },
+);
 
-const deleteUser = async (req, reply) => {
-    try {
-        const userId = req.params.id;
-        const deletedUser = await userService.deleteUser(userId);
-        if (!deletedUser) return reply.status(404).send({ error: 'User not found' });
-        return reply.send({ message: 'User deleted successfully' });
-    } catch (error) {
-        return reply.status(500).send({ error: 'Internal Server Error' });
-    }
-};
+const deleteUser = asyncUtil(
+  async (req: FastifyRequest, reply: FastifyReply) => {
+    const { id } = req.params as IParams;
+    const deletedUser = await userService.deleteUser(id);
+    if (!deletedUser)
+      return reply.status(404).send({ error: 'User not found' });
+    return reply.send({ message: 'User deleted successfully' });
+  },
+);
 
-module.exports = { createUser, getUser, updateUser, deleteUser };
+export { createUser, getUser, updateUser, deleteUser };

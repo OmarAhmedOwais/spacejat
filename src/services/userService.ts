@@ -1,20 +1,22 @@
-const User = require('../models/userModel');
+import { IUser } from '@/types/interfaces';
+import { User} from '../models/userModel';
 
-const createUser = async (userData) => {
-    const user = new User(userData);
-    return await user.save();
+
+const createUser = async (userData: IUser) => {
+  const user = new User(userData);
+  return await user.save();
 };
 
-const getUser = async (userId) => {
-    return await User.findById(userId);
+const getUser = async (userId: string) => {
+  return await User.findById(userId);
 };
 
-const updateUser = async (userId, userData) => {
-    return await User.findByIdAndUpdate(userId, userData, { new: true });
+const updateUser = async (userId: string, userData: IUser) => {
+  return await User.findByIdAndUpdate(userId, userData, { new: true });
 };
 
-const deleteUser = async (userId) => {
-    return await User.findByIdAndDelete(userId);
+const deleteUser = async (userId: string) => {
+  return await User.findByIdAndDelete(userId);
 };
 
-module.exports = { createUser, getUser, updateUser, deleteUser };
+export default { createUser, getUser, updateUser, deleteUser };
