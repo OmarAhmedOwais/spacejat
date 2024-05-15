@@ -5,7 +5,7 @@ import { IUser, IParams } from '@/types/interfaces';
 
 const createUser = asyncUtil(
   async (req: FastifyRequest, reply: FastifyReply) => {
-    const user = await userService.createUser(req.body as IUser);
+    const user = await userService.createUser(req.body as IUser) as IUser;
     return reply.send(user);
   },
 );
@@ -46,4 +46,4 @@ const deleteUser = asyncUtil(
   },
 );
 
-export { createUser, getUser, updateUser, deleteUser };
+export { createUser,getUsers , getUser, updateUser, deleteUser };
