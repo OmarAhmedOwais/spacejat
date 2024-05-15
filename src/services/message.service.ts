@@ -9,23 +9,17 @@ const createMessage = async (
   receiver: string,
 ) => {
   try {
-    let messageContent = {};
-    const receivers = receiver.split(',');
-    for (const receiver of receivers) {
-      messageContent = await Message.create({
-        title,
-        message: messageContent,
-        sender,
-        receiver: receiver.toString(),
-      });
-      wss.emit(receiver.toString(), messageContent);
-    }
-    messageContent = {
+    const messageContent = await Message.create({
       title,
-      message: messageContent,
+      message: message,
       sender,
-      receiver,
-    };
+      receiver: receiver.toString(),
+    });
+   console.log("messageContent",messageContent);
+   
+
+    wss.emit(messageContent.receiver.toString(), messageContent);
+
     return messageContent;
   } catch (error) {
     return -1;

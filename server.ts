@@ -1,10 +1,10 @@
 import 'colors';
-import { Server, IncomingMessage, ServerResponse } from 'http';
+import { Server as s, IncomingMessage, ServerResponse } from 'http';
 
 import dotenv from 'dotenv';
 import fastify, { FastifyInstance } from 'fastify';
 import swagger from 'fastify-swagger';
-import WebSocket from 'ws';
+import { WebSocket ,Server } from 'ws';
 import db_connection from 'config/db_connection';
 import { initSocket } from 'config/ws_connection';
 
@@ -14,7 +14,7 @@ import { globalErrorMiddleware } from '@/middlewares';
 
 dotenv.config({ path: 'config/config.env' });
 
-const app: FastifyInstance<Server, IncomingMessage, ServerResponse> = fastify();
+const app: FastifyInstance<s, IncomingMessage, ServerResponse> = fastify();
 app.register(swagger, {
   routePrefix: '/documentation',
   swagger: {
@@ -37,26 +37,15 @@ app.register(userRoutes, { prefix: '/api/users' });
 app.register(messageRouter, { prefix: '/api/messages' });
 globalErrorMiddleware(app);
 
-let wss: WebSocket.Server; // define wss outside the function
+let wss: Server; // define wss outside the function
 
 export const start = async (): Promise<void> => {
   try {
     db_connection(); // connect to MongoDB
 
-    wss = initSocket(app.server);
-
-    wss.on('connection', (ws) => {
-      console.log('WebSocket client connected'.green);
-
-      ws.on('message', (message) => {
-        console.log('Received message:'.blue, message);
-        // Handle message and send response back to client
-        ws.send('Message received by server'.blue);
-      });
-    });
-
-    await app.listen(3000);
-    console.log(`Server listening on http://localhost:3000`.green);
+    wss = initSocket(3001);
+    await app.listen(3001);
+    console.log(`Server listening on http://localhost:3001`.green);
   } catch (error) {
     console.error('Error starting server:'.red, error);
   }
