@@ -1,4 +1,5 @@
 import http from 'http';
+
 import WebSocket from 'ws';
 
 export const initSocket = (server: http.Server): WebSocket.Server => {

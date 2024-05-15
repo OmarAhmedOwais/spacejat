@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import 'colors'
+import 'colors';
 import dotenv from 'dotenv';
-dotenv.config({ path: "config/config.env" });
+dotenv.config({ path: 'config/config.env' });
 const MONGO_URI = process.env.MONGO_URI!;
 
 export default function db_connection(): void {

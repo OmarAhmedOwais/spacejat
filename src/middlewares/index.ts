@@ -1,1 +1,1 @@
-export * from './globalError.middleware'
+export * from './globalError.middleware';

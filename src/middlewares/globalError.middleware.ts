@@ -8,11 +8,7 @@ export const globalErrorMiddleware = (app: FastifyInstance) => {
   const isProduction = process.env.NODE_ENV === 'prod';
 
   app.setErrorHandler(
-    async (
-      err: ApiError,
-      _req: FastifyRequest,
-      reply: FastifyReply,
-    ) => {
+    async (err: ApiError, _req: FastifyRequest, reply: FastifyReply) => {
       const isApiError = err?.statusCode && err?.msg;
       const errorDetails = isProduction
         ? {
@@ -32,7 +28,9 @@ export const globalErrorMiddleware = (app: FastifyInstance) => {
         ...errorDetails,
       };
 
-      const statusCode = isApiError ? err.statusCode : StatusCodes.INTERNAL_SERVER_ERROR;
+      const statusCode = isApiError
+        ? err.statusCode
+        : StatusCodes.INTERNAL_SERVER_ERROR;
 
       reply.code(statusCode).send(response);
     },

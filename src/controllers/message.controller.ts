@@ -1,5 +1,7 @@
-import { messageService } from '../services/message.service';
 import { FastifyReply, FastifyRequest } from 'fastify';
+
+import { messageService } from '../services/message.service';
+
 import { asyncUtil } from '@/util/async';
 import { IMessage } from '@/types/interfaces';
 

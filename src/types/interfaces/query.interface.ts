@@ -1,4 +1,3 @@
-
 export interface IQuery {
   sort?: string;
   limit?: string;

@@ -1,15 +1,15 @@
 import 'colors';
+import { Server, IncomingMessage, ServerResponse } from 'http';
+
 import dotenv from 'dotenv';
-import path from 'path';
 import fastify, { FastifyInstance } from 'fastify';
 import swagger from 'fastify-swagger';
-import { Server, IncomingMessage, ServerResponse } from 'http';
 import WebSocket from 'ws';
-// @ts-ignore
-import fastifyStatic from 'fastify-static';
 import db_connection from 'config/db_connection';
 import { initSocket } from 'config/ws_connection';
+
 import { userRoutes, messageRouter } from './src/routes';
+
 import { globalErrorMiddleware } from '@/middlewares';
 
 dotenv.config({ path: 'config/config.env' });
@@ -32,9 +32,7 @@ app.register(swagger, {
   },
   exposeRoute: true,
 });
-app.register(fastifyStatic, {
-  root: path.join(__dirname, 'public'),
-});
+
 app.register(userRoutes, { prefix: '/api/users' });
 app.register(messageRouter, { prefix: '/api/messages' });
 globalErrorMiddleware(app);

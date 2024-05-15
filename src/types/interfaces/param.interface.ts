@@ -1,4 +1,3 @@
-
 export interface IParams {
-    id: string;
+  id: string;
 }

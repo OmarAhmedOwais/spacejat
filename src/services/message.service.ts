@@ -1,6 +1,6 @@
-import { User,Message } from '@/models';
 import { wss } from 'server';
 
+import { User, Message } from '@/models';
 
 const createMessage = async (
   title: string,
@@ -26,9 +26,9 @@ const createMessage = async (
       sender,
       receiver,
     };
-    return messageContent; 
+    return messageContent;
   } catch (error) {
-    return -1; 
+    return -1;
   }
 };
 
@@ -56,7 +56,7 @@ const createMessageAll = async (
       reciever: 'all',
     };
 
-    return messageContent; 
+    return messageContent;
   } catch (error) {
     return -1;
   }
@@ -65,12 +65,10 @@ const createMessageAll = async (
 const getMessages = async (receiver: string) => {
   try {
     const messages = await Message.find({ receiver });
-    return messages; 
+    return messages;
   } catch (error) {
     return -1;
   }
 };
 
-export const messageService= { createMessage, createMessageAll,getMessages}
-
-
+export const messageService = { createMessage, createMessageAll, getMessages };

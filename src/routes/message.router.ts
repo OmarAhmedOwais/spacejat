@@ -1,8 +1,8 @@
 import { FastifyInstance } from 'fastify';
-import { BroadcastMessage, sendMessage,getMessages } from '@/controllers';
+
+import { BroadcastMessage, sendMessage, getMessages } from '@/controllers';
 
 const messageRouter = async (fastify: FastifyInstance): Promise<void> => {
-  
   fastify.route({
     method: 'POST',
     url: '/sendMessage',
@@ -20,7 +20,6 @@ const messageRouter = async (fastify: FastifyInstance): Promise<void> => {
     url: '/getMessages',
     handler: getMessages,
   });
-
 };
-  
-export  {messageRouter} ;
+
+export { messageRouter };

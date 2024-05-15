@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+
 import {
   createUser,
   getUsers,
@@ -11,32 +12,32 @@ const userRoutes = async (fastify: FastifyInstance): Promise<void> => {
   fastify.route({
     method: 'POST',
     url: '/',
-    handler: createUser
+    handler: createUser,
   });
 
   fastify.route({
     method: 'GET',
     url: '/',
-    handler: getUsers
+    handler: getUsers,
   });
 
   fastify.route({
     method: 'GET',
     url: '/:id',
-    handler: getUser
+    handler: getUser,
   });
 
   fastify.route({
     method: 'PUT',
     url: '/:id',
-    handler: updateUser
+    handler: updateUser,
   });
 
   fastify.route({
     method: 'DELETE',
     url: '/:id',
-    handler: deleteUser
+    handler: deleteUser,
   });
 };
 
-export {userRoutes};
+export { userRoutes };
