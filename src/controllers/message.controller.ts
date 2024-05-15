@@ -35,3 +35,15 @@ export const BroadcastMessage = asyncUtil(
     }
   },
 );
+
+export const getMessages = asyncUtil(
+  async (req: FastifyRequest, res: FastifyReply) => {
+    const { receiver } = req.body as IMessage;
+    const response = await messageService.getMessages(receiver);
+    if (response === -1) {
+      res.status(500).send('Error getting messages');
+    } else {
+      res.status(200).send(response);
+    }
+  },
+);

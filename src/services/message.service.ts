@@ -26,9 +26,9 @@ const createMessage = async (
       sender,
       receiver,
     };
-    return messageContent; // Continue to the next middleware or route
+    return messageContent; 
   } catch (error) {
-    return -1; // Pass any errors to the error-handling middleware
+    return -1; 
   }
 };
 
@@ -39,8 +39,6 @@ const createMessageAll = async (
 ) => {
   try {
     const users = await User.find();
-    // Access the WebSocket server from the request object
-    // Create Message for each user and emit to WebSocket
     let messageContent = {};
     for (const user of users) {
       messageContent = await Message.create({
@@ -58,12 +56,21 @@ const createMessageAll = async (
       reciever: 'all',
     };
 
-    return messageContent; // Continue to the next middleware or route
+    return messageContent; 
   } catch (error) {
-    return -1; // Pass any errors to the error-handling middleware
+    return -1;
   }
 };
 
-export const messageService= { createMessage, createMessageAll}
+const getMessages = async (receiver: string) => {
+  try {
+    const messages = await Message.find({ receiver });
+    return messages; 
+  } catch (error) {
+    return -1;
+  }
+};
+
+export const messageService= { createMessage, createMessageAll,getMessages}
 
 

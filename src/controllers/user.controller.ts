@@ -1,5 +1,6 @@
 import {userService} from '@/services/user.service';
 import { FastifyReply, FastifyRequest } from 'fastify';
+
 import { asyncUtil } from '@/util/async';
 import { IUser, IParams } from '@/types/interfaces';
 
@@ -11,13 +12,13 @@ const createUser = asyncUtil(
 );
 
 const getUsers = asyncUtil(async (req: FastifyRequest, reply: FastifyReply) => {
-  const user = await userService.getUsers();
+  const user: IUser[] = await userService.getUsers();
   if (!user.length) return reply.status(404).send({ error: 'No User found' });
   return reply.send(user);
 });
 const getUser = asyncUtil(async (req: FastifyRequest, reply: FastifyReply) => {
   const { id } = req.params as IParams;
-  const user = await userService.getUser(id);
+  const user  = await userService.getUser(id) as IUser;
   if (!user) return reply.status(404).send({ error: 'User not found' });
   return reply.send(user);
 });
@@ -26,10 +27,10 @@ const updateUser = asyncUtil(
   async (req: FastifyRequest, reply: FastifyReply) => {
     const { id } = req.params as IParams;
     const userData = req.body;
-    const updatedUser = await userService.updateUser(
+    const updatedUser  = await userService.updateUser(
       id as string,
       userData as IUser,
-    );
+    ) as IUser;
     if (!updatedUser)
       return reply.status(404).send({ error: 'User not found' });
     return reply.send(updatedUser);

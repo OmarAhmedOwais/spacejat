@@ -1,17 +1,18 @@
 import 'colors';
 import dotenv from 'dotenv';
-
+import path from 'path';
 import fastify, { FastifyInstance } from 'fastify';
 import swagger from 'fastify-swagger';
 import { Server, IncomingMessage, ServerResponse } from 'http';
 import WebSocket from 'ws';
-
+// @ts-ignore
+import fastifyStatic from 'fastify-static';
 import db_connection from 'config/db_connection';
 import { initSocket } from 'config/ws_connection';
-import userRoutes from './src/routes/user.router';
+import { userRoutes, messageRouter } from './src/routes';
 import { globalErrorMiddleware } from '@/middlewares';
-// import the db_connection function
-dotenv.config({ path: "config/config.env" });
+
+dotenv.config({ path: 'config/config.env' });
 
 const app: FastifyInstance<Server, IncomingMessage, ServerResponse> = fastify();
 app.register(swagger, {
@@ -31,8 +32,11 @@ app.register(swagger, {
   },
   exposeRoute: true,
 });
-
-app.register(userRoutes, { prefix: '/api' });
+app.register(fastifyStatic, {
+  root: path.join(__dirname, 'public'),
+});
+app.register(userRoutes, { prefix: '/api/users' });
+app.register(messageRouter, { prefix: '/api/messages' });
 globalErrorMiddleware(app);
 
 let wss: WebSocket.Server; // define wss outside the function
@@ -62,4 +66,4 @@ export const start = async (): Promise<void> => {
 
 start();
 
-export { wss }; // export wss
+export { wss };

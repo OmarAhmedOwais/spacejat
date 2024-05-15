@@ -10,33 +10,33 @@ import {
 const userRoutes = async (fastify: FastifyInstance): Promise<void> => {
   fastify.route({
     method: 'POST',
-    url: '/users',
+    url: '/',
     handler: createUser
   });
 
   fastify.route({
     method: 'GET',
-    url: '/users',
+    url: '/',
     handler: getUsers
   });
 
   fastify.route({
     method: 'GET',
-    url: '/users/:id',
+    url: '/:id',
     handler: getUser
   });
 
   fastify.route({
     method: 'PUT',
-    url: '/users/:id',
+    url: '/:id',
     handler: updateUser
   });
 
   fastify.route({
     method: 'DELETE',
-    url: '/users/:id',
+    url: '/:id',
     handler: deleteUser
   });
 };
 
-export default userRoutes;
+export {userRoutes};
