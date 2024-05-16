@@ -1,5 +1,5 @@
 import { wss } from 'server';
-
+import { WebSocket } from 'ws';
 import { User, Message } from '@/models';
 
 const createMessage = async (
@@ -15,10 +15,12 @@ const createMessage = async (
       sender,
       receiver: receiver.toString(),
     });
-   console.log("messageContent",messageContent);
-   
+    console.log('messageContent', messageContent);
+    // Check if a client is connected with the receiver ID
 
-    wss.emit(messageContent.receiver.toString(), messageContent);
+    wss.clients.forEach((client) => {
+      client.send(JSON.stringify(messageContent));
+    });
 
     return messageContent;
   } catch (error) {
@@ -37,12 +39,17 @@ const createMessageAll = async (
     for (const user of users) {
       messageContent = await Message.create({
         title,
-        message: messageContent,
+        message,
         sender,
         receiver: user._id.toString(),
       });
-      wss.emit(user._id.toString(), messageContent);
+
+      // Send the message to all connected clients
+      wss.clients.forEach((client) => {
+        client.send(JSON.stringify(messageContent));
+      });
     }
+
     messageContent = {
       title,
       message: messageContent,
@@ -55,7 +62,6 @@ const createMessageAll = async (
     return -1;
   }
 };
-
 const getMessages = async (receiver: string) => {
   try {
     const messages = await Message.find({ receiver });

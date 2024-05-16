@@ -5,15 +5,14 @@ export const initSocket = (port: number): WebSocketServer => {
 
   wss.on('connection', (ws: WebSocket) => {
     console.log('A client connected');
-
     ws.on('message', (message: string) => {
-      console.log(`A client joined room: ${message}`);
+      console.log(`Received message => ${message}`.blue);
     });
+    ws.send('Welcome to the chat room');
 
     ws.on('close', () => {
       console.log('A client disconnected');
     });
   });
-
   return wss;
 };

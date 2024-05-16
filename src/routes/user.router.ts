@@ -12,6 +12,17 @@ const userRoutes = async (fastify: FastifyInstance): Promise<void> => {
   fastify.route({
     method: 'POST',
     url: '/',
+    schema: {
+      body: {
+        type: 'object',
+        required: ['name', 'email', 'age'],
+        properties: {
+          name: { type: 'string' },
+          email: { type: 'string', format: 'email' },
+          age: { type: 'number' },
+        },
+      },
+    },
     handler: createUser,
   });
 
@@ -30,6 +41,16 @@ const userRoutes = async (fastify: FastifyInstance): Promise<void> => {
   fastify.route({
     method: 'PUT',
     url: '/:id',
+    schema: {
+      body: {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+          email: { type: 'string', format: 'email' },
+          age: { type: 'number' },
+        },
+      },
+    },
     handler: updateUser,
   });
 

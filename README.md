@@ -21,4 +21,4 @@ This project implements a Fastify application with CRUD operations endpoints and
     ```
 2. Access the API documentation at [http://localhost:3000/documentation](http://localhost:3000/documentation).
 3. Test the API endpoints using tools like Postman.
-4. WebSocket server is integrated into the Fastify application.
+4. WebSocket server is integrated into the Fastify application. at [ws://localhost:3001](ws://localhost:3001)
