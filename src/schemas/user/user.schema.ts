@@ -1,4 +1,5 @@
 const createUserSchema = {
+  tags: ['Users'],
   body: {
     type: 'object',
     required: ['name', 'email', 'age'],
@@ -11,6 +12,7 @@ const createUserSchema = {
 };
 
 const updateUserSchema = {
+  tags: ['Users'],
   body: {
     type: 'object',
     properties: {

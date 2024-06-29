@@ -1,6 +1,9 @@
 import { FastifyInstance } from 'fastify';
 
-import { createUserSchema, updateUserSchema } from '../schemas/user/user.schema';
+import {
+  createUserSchema,
+  updateUserSchema,
+} from '../schemas/user/user.schema';
 import {
   createUser,
   getUsers,
@@ -20,12 +23,14 @@ const userRoutes = async (fastify: FastifyInstance): Promise<void> => {
   fastify.route({
     method: 'GET',
     url: '/',
+    schema: { tags: ['Users'] },
     handler: getUsers,
   });
 
   fastify.route({
     method: 'GET',
     url: '/:id',
+    schema: { tags: ['Users'] },
     handler: getUser,
   });
 
@@ -39,6 +44,7 @@ const userRoutes = async (fastify: FastifyInstance): Promise<void> => {
   fastify.route({
     method: 'DELETE',
     url: '/:id',
+    schema: { tags: ['Users'] },
     handler: deleteUser,
   });
 };

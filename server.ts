@@ -10,7 +10,7 @@ import db_connection from 'config/db_connection';
 import { initSocket } from 'config/ws_connection';
 
 import { userRoutes, messageRouter } from './src/routes';
-import { swaggerDefinitions } from './src/schemas/schema.mount';
+import swaggerDefinitions from './src/schemas';
 
 import { globalErrorMiddleware } from '@/middlewares';
 
@@ -34,52 +34,10 @@ app.register(swagger, {
     produces: ['application/json'],
     basePath: '/',
     schemes: ['http', 'https'],
-    definitions: swaggerDefinitions,
-    paths: {
-      '/api/users': {
-        post: {
-          summary: 'Create a new user',
-          requestBody: {
-            required: true,
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/definitions/User',
-                },
-              },
-            },
-          },
-        },
-        put: {
-          summary: 'Update an existing user',
-          requestBody: {
-            required: true,
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/definitions/User',
-                },
-              },
-            },
-          },
-        },
-      },
-      '/api/messages/broadcastMessage': {
-        post: {
-          summary: 'Broadcast a new message',
-          requestBody: {
-            required: true,
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/definitions/Message',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+  },
+  definitions: {
+    User: swaggerDefinitions.User, // Group for User definitions
+    Message: swaggerDefinitions.Message, // Group for Message definitions
   },
 });
 
@@ -88,8 +46,14 @@ app.register(swagger_ui, {
 });
 
 // Register routes with prefixes
-app.register(userRoutes, { prefix: '/api/users' });
-app.register(messageRouter, { prefix: '/api/messages' });
+app.register(userRoutes, {
+  prefix: '/api/users',
+  swagger: { tags: ['Users'] },
+});
+app.register(messageRouter, {
+  prefix: '/api/messages',
+  swagger: { tags: ['Users'] },
+});
 
 // Register global error middleware
 globalErrorMiddleware(app);

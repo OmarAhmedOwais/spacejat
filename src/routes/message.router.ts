@@ -13,6 +13,7 @@ const messageRouter = async (fastify: FastifyInstance): Promise<void> => {
     method: 'POST',
     url: '/broadcastMessage',
     schema: {
+      tags: ['Messages'],
       body: {
         type: 'object',
         required: ['sender', 'title', 'message'],
@@ -29,6 +30,7 @@ const messageRouter = async (fastify: FastifyInstance): Promise<void> => {
   fastify.route({
     method: 'GET',
     url: '/getMessages/:receiver',
+    schema: { tags: ['Messages'] },
     handler: getMessages,
   });
 };
