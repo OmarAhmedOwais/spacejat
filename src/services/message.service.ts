@@ -1,5 +1,5 @@
 import { wss } from 'server';
-import { WebSocket } from 'ws';
+
 import { User, Message } from '@/models';
 
 const createMessage = async (
